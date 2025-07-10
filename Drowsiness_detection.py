@@ -4,7 +4,7 @@
 # In[1]:
 
 
-pip install cmake
+
 
 
 # In[3]:
@@ -16,13 +16,13 @@ pip install dlib-19.24.1-cp311-cp311-win_amd64.whl
 # In[1]:
 
 
-pip install face_recognition
+
 
 
 # In[3]:
 
 
-get_ipython().system('pip install opencv-python')
+
 
 
 # In[2]:
@@ -152,7 +152,7 @@ process_image(img2)
 # In[21]:
 
 
-get_ipython().system('pip install playsound')
+
 
 
 # In[22]:
