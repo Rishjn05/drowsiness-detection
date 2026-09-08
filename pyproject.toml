@@ -1,0 +1,26 @@
+[project]
+name = "drowsiness-detection"
+version = "0.2.0"
+description = "Real-time driver drowsiness detection (EAR/MAR/PERCLOS on MediaPipe Face Mesh)"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "opencv-python>=4.8,<5",
+    "mediapipe>=0.10,<0.11",
+    "numpy>=1.24,<2",
+    "playsound==1.2.2",
+]
+
+[project.optional-dependencies]
+dashboard = ["streamlit>=1.30,<2"]
+dev = ["pytest>=7.4,<8"]
+
+[project.scripts]
+drowsiness-detect = "drowsiness.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
