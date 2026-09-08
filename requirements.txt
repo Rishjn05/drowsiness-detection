@@ -1,5 +1,5 @@
 opencv-python>=4.8,<5
-mediapipe>=0.10,<0.11
+mediapipe==0.10.21  # newer 0.10.x wheels dropped the legacy `solutions` API this project uses
 numpy>=1.24,<2
 playsound==1.2.2
 streamlit>=1.30,<2

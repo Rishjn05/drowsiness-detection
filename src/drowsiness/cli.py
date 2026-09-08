@@ -92,7 +92,13 @@ def run(argv=None) -> int:
             if not args.no_display:
                 _annotate(frame, result)
                 cv2.imshow("Drowsiness detection", frame)
-                if cv2.waitKey(1) & 0xFF == ord("q"):
+                key = cv2.waitKey(1) & 0xFF
+                if key == ord("q"):
+                    break
+                # Detect the window being closed via the titlebar X button —
+                # waitKey alone doesn't see that, so the loop would otherwise
+                # keep running (or spawn a "not responding" window) forever.
+                if cv2.getWindowProperty("Drowsiness detection", cv2.WND_PROP_VISIBLE) < 1:
                     break
     finally:
         detector.close()
