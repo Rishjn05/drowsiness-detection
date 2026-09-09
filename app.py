@@ -14,6 +14,7 @@ import streamlit as st
 
 from src.drowsiness.alarm import AlarmPlayer
 from src.drowsiness.detector import DetectorConfig, DrowsinessDetector
+from src.drowsiness.session_log import SessionLogger
 
 st.set_page_config(page_title="Drowsiness Detection", layout="wide")
 st.title("Driver Drowsiness Detection")
@@ -63,6 +64,8 @@ if run_button:
         )
         detector = DrowsinessDetector(config)
         alarm = AlarmPlayer(alarm_file, cooldown_seconds=alarm_cooldown)
+        logger = SessionLogger()
+        session_start = time.time()
 
         perclos_history = []
         frame_count = 0
@@ -78,6 +81,7 @@ if run_button:
                 frame = cv2.resize(frame, (800, 500))
                 result = detector.process(frame)
                 perclos_history.append(result.perclos)
+                logger.log_frame(time.time() - session_start, result)
 
                 if result.drowsy:
                     drowsy_count += 1
@@ -99,7 +103,18 @@ if run_button:
             detector.close()
             cap.release()
 
+        logger.close(time.time() - session_start)
         pct = (drowsy_count / frame_count * 100) if frame_count else 0
         st.success(f"Done. {frame_count} frames processed, {pct:.1f}% flagged drowsy.")
+
+        summary = logger.summary()
+        st.subheader("Session summary")
+        st.json(summary)
+        st.download_button(
+            "Download session log (CSV)",
+            data=logger.to_csv_string(),
+            file_name="drowsiness_session.csv",
+            mime="text/csv",
+        )
 else:
     st.info("Choose a source in the sidebar and click Start.")

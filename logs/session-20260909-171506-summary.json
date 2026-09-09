@@ -1,0 +1,261 @@
+{
+  "total_frames": 4377,
+  "session_duration_s": 146.086,
+  "drowsy_event_count": 42,
+  "total_drowsy_time_s": 26.22,
+  "drowsy_time_pct": 17.95,
+  "events": [
+    {
+      "start_s": 2.892944097518921,
+      "end_s": 5.202352523803711,
+      "duration_s": 2.31,
+      "peak_perclos": 0.048
+    },
+    {
+      "start_s": 6.403520822525024,
+      "end_s": 6.468909740447998,
+      "duration_s": 0.07,
+      "peak_perclos": 0.017
+    },
+    {
+      "start_s": 7.493781328201294,
+      "end_s": 7.60701847076416,
+      "duration_s": 0.11,
+      "peak_perclos": 0.017
+    },
+    {
+      "start_s": 8.358281135559082,
+      "end_s": 8.49890685081482,
+      "duration_s": 0.14,
+      "peak_perclos": 0.011
+    },
+    {
+      "start_s": 10.687459230422974,
+      "end_s": 10.995715379714966,
+      "duration_s": 0.31,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 11.82807183265686,
+      "end_s": 11.86393666267395,
+      "duration_s": 0.04,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 14.195876121520996,
+      "end_s": 14.286463022232056,
+      "duration_s": 0.09,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 14.558918237686157,
+      "end_s": 14.628727436065674,
+      "duration_s": 0.07,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 16.325669050216675,
+      "end_s": 16.755751848220825,
+      "duration_s": 0.43,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 17.394084692001343,
+      "end_s": 17.76271152496338,
+      "duration_s": 0.37,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 18.162723779678345,
+      "end_s": 18.464982748031616,
+      "duration_s": 0.3,
+      "peak_perclos": 0.011
+    },
+    {
+      "start_s": 20.595879316329956,
+      "end_s": 20.723365545272827,
+      "duration_s": 0.13,
+      "peak_perclos": 0.017
+    },
+    {
+      "start_s": 21.63680100440979,
+      "end_s": 21.72601890563965,
+      "duration_s": 0.09,
+      "peak_perclos": 0.028
+    },
+    {
+      "start_s": 28.965583324432373,
+      "end_s": 29.622900247573853,
+      "duration_s": 0.66,
+      "peak_perclos": 0.056
+    },
+    {
+      "start_s": 29.89267635345459,
+      "end_s": 29.985167980194092,
+      "duration_s": 0.09,
+      "peak_perclos": 0.056
+    },
+    {
+      "start_s": 32.19292664527893,
+      "end_s": 32.59267210960388,
+      "duration_s": 0.4,
+      "peak_perclos": 0.05
+    },
+    {
+      "start_s": 34.19314169883728,
+      "end_s": 34.22511053085327,
+      "duration_s": 0.03,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 38.79154562950134,
+      "end_s": 39.39783263206482,
+      "duration_s": 0.61,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 43.73702788352966,
+      "end_s": 45.893112659454346,
+      "duration_s": 2.16,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 50.01687550544739,
+      "end_s": 50.163249492645264,
+      "duration_s": 0.15,
+      "peak_perclos": 0.011
+    },
+    {
+      "start_s": 51.518882274627686,
+      "end_s": 53.22286367416382,
+      "duration_s": 1.7,
+      "peak_perclos": 0.117
+    },
+    {
+      "start_s": 53.49335217475891,
+      "end_s": 53.95736002922058,
+      "duration_s": 0.46,
+      "peak_perclos": 0.117
+    },
+    {
+      "start_s": 55.76567268371582,
+      "end_s": 55.925557374954224,
+      "duration_s": 0.16,
+      "peak_perclos": 0.178
+    },
+    {
+      "start_s": 64.78339433670044,
+      "end_s": 69.02893710136414,
+      "duration_s": 4.25,
+      "peak_perclos": 0.078
+    },
+    {
+      "start_s": 74.62339663505554,
+      "end_s": 74.88428568840027,
+      "duration_s": 0.26,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 75.15308570861816,
+      "end_s": 75.77315306663513,
+      "duration_s": 0.62,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 88.58322405815125,
+      "end_s": 88.75934147834778,
+      "duration_s": 0.18,
+      "peak_perclos": 0.022
+    },
+    {
+      "start_s": 121.54685592651367,
+      "end_s": 123.04773688316345,
+      "duration_s": 1.5,
+      "peak_perclos": 0.017
+    },
+    {
+      "start_s": 123.90860366821289,
+      "end_s": 124.01979303359985,
+      "duration_s": 0.11,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 124.28704786300659,
+      "end_s": 124.85294270515442,
+      "duration_s": 0.57,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 125.2486846446991,
+      "end_s": 125.59053301811218,
+      "duration_s": 0.34,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 125.8637752532959,
+      "end_s": 126.14489960670471,
+      "duration_s": 0.28,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 127.31790280342102,
+      "end_s": 127.62043023109436,
+      "duration_s": 0.3,
+      "peak_perclos": 0.028
+    },
+    {
+      "start_s": 131.53589248657227,
+      "end_s": 131.6214156150818,
+      "duration_s": 0.09,
+      "peak_perclos": 0.028
+    },
+    {
+      "start_s": 133.87942171096802,
+      "end_s": 134.112952709198,
+      "duration_s": 0.23,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 134.48544454574585,
+      "end_s": 136.77548241615295,
+      "duration_s": 2.29,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 137.08203601837158,
+      "end_s": 137.97212529182434,
+      "duration_s": 0.89,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 138.2745177745819,
+      "end_s": 140.9498097896576,
+      "duration_s": 2.68,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 141.2061836719513,
+      "end_s": 141.6019308567047,
+      "duration_s": 0.4,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 143.12608098983765,
+      "end_s": 143.1418776512146,
+      "duration_s": 0.02,
+      "peak_perclos": 0.006
+    },
+    {
+      "start_s": 144.37533950805664,
+      "end_s": 144.48569464683533,
+      "duration_s": 0.11,
+      "peak_perclos": 0.006
+    },
+    {
+      "start_s": 144.73366737365723,
+      "end_s": 144.9492576122284,
+      "duration_s": 0.22,
+      "peak_perclos": 0.006
+    }
+  ]
+}

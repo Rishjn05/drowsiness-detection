@@ -10,6 +10,7 @@ import cv2
 from .alarm import AlarmPlayer
 from .calibration import calibrate
 from .detector import DetectorConfig, DrowsinessDetector
+from .session_log import SessionLogger
 
 
 def parse_args(argv=None) -> argparse.Namespace:
@@ -25,6 +26,11 @@ def parse_args(argv=None) -> argparse.Namespace:
     p.add_argument("--ear-threshold", type=float, default=None, help="Override EAR threshold (skips calibration)")
     p.add_argument("--mar-threshold", type=float, default=None, help="Override MAR threshold (skips calibration)")
     p.add_argument("--no-display", action="store_true", help="Run headless (no cv2.imshow window)")
+    p.add_argument(
+        "--log-dir",
+        default=None,
+        help="Directory to write a per-frame CSV + JSON event summary. Omit to skip logging.",
+    )
     return p.parse_args(argv)
 
 
@@ -75,6 +81,7 @@ def run(argv=None) -> int:
     frame_count = 0
     drowsy_frames = 0
     start_time = time.time()
+    logger = SessionLogger() if args.log_dir else None
 
     try:
         while True:
@@ -84,6 +91,10 @@ def run(argv=None) -> int:
             frame_count += 1
             frame = cv2.resize(frame, (800, 500))
             result = detector.process(frame)
+            elapsed = time.time() - start_time
+
+            if logger is not None:
+                logger.log_frame(elapsed, result)
 
             if result.drowsy:
                 drowsy_frames += 1
@@ -109,6 +120,21 @@ def run(argv=None) -> int:
     pct = (drowsy_frames / frame_count * 100) if frame_count else 0.0
     print(f"Processed {frame_count} frames in {duration:.2f}s")
     print(f"Drowsy frames: {drowsy_frames} ({pct:.2f}%)")
+
+    if logger is not None:
+        logger.close(duration)
+        from pathlib import Path
+        import time as _time
+
+        stamp = _time.strftime("%Y%m%d-%H%M%S")
+        csv_path = Path(args.log_dir) / f"session-{stamp}.csv"
+        json_path = Path(args.log_dir) / f"session-{stamp}-summary.json"
+        logger.write_csv(str(csv_path))
+        logger.write_summary_json(str(json_path))
+        summary = logger.summary()
+        print(f"Logged {summary['total_frames']} frames -> {csv_path}")
+        print(f"Drowsy events: {summary['drowsy_event_count']} totalling {summary['total_drowsy_time_s']}s -> {json_path}")
+
     return 0
 
 

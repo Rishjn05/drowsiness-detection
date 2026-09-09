@@ -1,0 +1,57 @@
+{
+  "total_frames": 2785,
+  "session_duration_s": 92.823,
+  "drowsy_event_count": 8,
+  "total_drowsy_time_s": 35.62,
+  "drowsy_time_pct": 38.37,
+  "events": [
+    {
+      "start_s": 4.659794807434082,
+      "end_s": 7.992347002029419,
+      "duration_s": 3.33,
+      "peak_perclos": 0.494
+    },
+    {
+      "start_s": 15.559343814849854,
+      "end_s": 20.665090084075928,
+      "duration_s": 5.11,
+      "peak_perclos": 0.556
+    },
+    {
+      "start_s": 23.304741859436035,
+      "end_s": 25.588835954666138,
+      "duration_s": 2.28,
+      "peak_perclos": 0.439
+    },
+    {
+      "start_s": 26.129194498062134,
+      "end_s": 39.99110984802246,
+      "duration_s": 13.86,
+      "peak_perclos": 1.0
+    },
+    {
+      "start_s": 51.76692843437195,
+      "end_s": 57.34923601150513,
+      "duration_s": 5.58,
+      "peak_perclos": 0.606
+    },
+    {
+      "start_s": 60.35234236717224,
+      "end_s": 61.248119831085205,
+      "duration_s": 0.9,
+      "peak_perclos": 0.122
+    },
+    {
+      "start_s": 78.41712212562561,
+      "end_s": 82.55008506774902,
+      "duration_s": 4.13,
+      "peak_perclos": 0.0
+    },
+    {
+      "start_s": 88.95089077949524,
+      "end_s": 89.38057041168213,
+      "duration_s": 0.43,
+      "peak_perclos": 0.067
+    }
+  ]
+}
