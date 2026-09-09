@@ -4,15 +4,16 @@ Replaces face_recognition/dlib (compiled dependency, slow CNN detector) with
 MediaPipe Face Mesh (pure pip wheel, real-time on CPU).
 
 Adds:
-- PERCLOS-style rolling window instead of an unbounded up/down score.
-- Separate, independently-tunable eye-closure and yawn-duration triggers.
+- PERCLOS-style rolling *time* window (not a fixed frame count), so it stays
+  correct even if the real frame rate drifts from `fps_estimate`.
+- Independently-tunable eye-closure (EAR) and yawn-duration (MAR) triggers,
+  both expressed in seconds so they match what the CLI exposes.
 - Graceful "no face found" handling.
-
 """
 from __future__ import annotations
 
 from collections import deque
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from typing import Deque, List, Optional, Tuple
 
 import numpy as np
@@ -33,6 +34,7 @@ class FrameResult:
     mar: Optional[float] = None
     eyes_closed: bool = False
     yawning: bool = False
+    yawn_duration: float = 0.0
     perclos: float = 0.0
     drowsy: bool = False
 
@@ -42,9 +44,9 @@ class DetectorConfig:
     ear_threshold: float = 0.21
     mar_threshold: float = 0.6
     window_seconds: float = 6.0
-    fps_estimate: int = 15
+    fps_estimate: int = 15  # kept for callers/logging; windowing itself is time-based
     perclos_drowsy_ratio: float = 0.4  # fraction of window with eyes closed
-    consecutive_yawn_frames: int = 8
+    yawn_seconds: float = 4.0  # seconds mouth must stay open before it counts as a yawn
 
 
 class DrowsinessDetector:
@@ -60,9 +62,9 @@ class DrowsinessDetector:
             min_detection_confidence=0.5,
             min_tracking_confidence=0.5,
         )
-        window_len = max(1, int(self.config.window_seconds * self.config.fps_estimate))
-        self._eye_closed_history: Deque[bool] = deque(maxlen=window_len)
-        self._yawn_run = 0
+        # (timestamp, eyes_closed) samples, trimmed to window_seconds each frame
+        self._eye_closed_history: Deque[Tuple[float, bool]] = deque()
+        self._yawn_start: Optional[float] = None
 
     def close(self) -> None:
         self._mesh.close()
@@ -72,13 +74,15 @@ class DrowsinessDetector:
             (landmark_list[i].x * w, landmark_list[i].y * h) for i in indices
         ]
 
-    def process(self, frame_bgr: np.ndarray) -> FrameResult:
+    def process(self, frame_bgr: np.ndarray, timestamp: float) -> FrameResult:
         h, w = frame_bgr.shape[:2]
         rgb = frame_bgr[:, :, ::-1]
         results = self._mesh.process(rgb)
 
         if not results.multi_face_landmarks:
-            self._eye_closed_history.append(False)
+            self._eye_closed_history.append((timestamp, False))
+            self._trim_history(timestamp)
+            self._yawn_start = None
             return FrameResult(face_found=False, perclos=self._perclos())
 
         face_landmarks = results.multi_face_landmarks[0].landmark
@@ -91,13 +95,19 @@ class DrowsinessDetector:
         mar = mouth_aspect_ratio(mouth)
 
         eyes_closed = ear < self.config.ear_threshold
-        self._eye_closed_history.append(eyes_closed)
+        self._eye_closed_history.append((timestamp, eyes_closed))
+        self._trim_history(timestamp)
 
-        if mar > self.config.mar_threshold:
-            self._yawn_run += 1
+        mouth_open = mar > self.config.mar_threshold
+        if mouth_open:
+            if self._yawn_start is None:
+                self._yawn_start = timestamp
+            yawn_duration = timestamp - self._yawn_start
         else:
-            self._yawn_run = 0
-        yawning = self._yawn_run >= self.config.consecutive_yawn_frames
+            self._yawn_start = None
+            yawn_duration = 0.0
+
+        yawning = yawn_duration >= self.config.yawn_seconds
 
         perclos = self._perclos()
         drowsy = perclos >= self.config.perclos_drowsy_ratio or yawning
@@ -108,14 +118,21 @@ class DrowsinessDetector:
             mar=round(mar, 3),
             eyes_closed=eyes_closed,
             yawning=yawning,
+            yawn_duration=round(yawn_duration, 2),
             perclos=round(perclos, 3),
             drowsy=drowsy,
         )
 
+    def _trim_history(self, now: float) -> None:
+        cutoff = now - self.config.window_seconds
+        while self._eye_closed_history and self._eye_closed_history[0][0] < cutoff:
+            self._eye_closed_history.popleft()
+
     def _perclos(self) -> float:
         if not self._eye_closed_history:
             return 0.0
-        return sum(self._eye_closed_history) / len(self._eye_closed_history)
+        closed = sum(1 for _, is_closed in self._eye_closed_history if is_closed)
+        return closed / len(self._eye_closed_history)
 
     def __enter__(self) -> "DrowsinessDetector":
         return self

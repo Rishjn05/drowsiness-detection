@@ -1,0 +1,15 @@
+{
+  "total_frames": 701,
+  "session_duration_s": 23.373,
+  "drowsy_event_count": 1,
+  "total_drowsy_time_s": 20.29,
+  "drowsy_time_pct": 86.81,
+  "events": [
+    {
+      "start_s": 3.629134178161621,
+      "end_s": 23.92327332496643,
+      "duration_s": 20.29,
+      "peak_perclos": 1.0
+    }
+  ]
+}

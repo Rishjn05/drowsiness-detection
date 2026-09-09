@@ -1,0 +1,27 @@
+{
+  "total_frames": 699,
+  "session_duration_s": 23.683,
+  "drowsy_event_count": 3,
+  "total_drowsy_time_s": 9.2,
+  "drowsy_time_pct": 38.85,
+  "events": [
+    {
+      "start_s": 0.3448827266693115,
+      "end_s": 0.486316442489624,
+      "duration_s": 0.14,
+      "peak_perclos": 1.0
+    },
+    {
+      "start_s": 0.6269698143005371,
+      "end_s": 2.562730312347412,
+      "duration_s": 1.94,
+      "peak_perclos": 0.735
+    },
+    {
+      "start_s": 13.762989521026611,
+      "end_s": 20.8827383518219,
+      "duration_s": 7.12,
+      "peak_perclos": 0.834
+    }
+  ]
+}

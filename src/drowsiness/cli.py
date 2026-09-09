@@ -26,14 +26,14 @@ def parse_args(argv=None) -> argparse.Namespace:
     p.add_argument(
         "--alarm-delay",
         type=float,
-        default=2.0,
+        default=0,
         help="Seconds the drowsy state must persist (in addition to the yawn/eye-closure "
         "duration) before the alarm actually sounds — filters out momentary/borderline flags",
     )
     p.add_argument("--calibrate-seconds", type=float, default=3.0, help="Baseline calibration window; 0 to skip")
-    p.add_argument("--ear-threshold", type=float, default=None, help="Override EAR threshold (skips calibration)")
-    p.add_argument("--mar-threshold", type=float, default=None, help="Override MAR threshold (skips calibration)")
-    p.add_argument("--yawn-seconds", type=float, default=4.0, help="Seconds mouth must stay open before it counts as a yawn")
+    p.add_argument("--ear-threshold", type=float, default=0.21, help="Override EAR threshold (skips calibration)")
+    p.add_argument("--mar-threshold", type=float, default=0.45, help="Override MAR threshold (skips calibration)")
+    p.add_argument("--yawn-seconds", type=float, default=3.0, help="Seconds mouth must stay open before it counts as a yawn")
     p.add_argument("--no-display", action="store_true", help="Run headless (no cv2.imshow window)")
     p.add_argument(
         "--log-dir",
