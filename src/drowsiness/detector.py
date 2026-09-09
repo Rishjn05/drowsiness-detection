@@ -8,10 +8,6 @@ Adds:
 - Separate, independently-tunable eye-closure and yawn-duration triggers.
 - Graceful "no face found" handling.
 
-Note: head-pose/nod detection was tried and removed — opening the mouth
-during a yawn moves the chin landmark enough to throw off the solvePnP
-pose estimate, causing false "nod" triggers on ordinary yawns. EAR/MAR/
-PERCLOS turned out to be the more reliable signal set.
 """
 from __future__ import annotations
 

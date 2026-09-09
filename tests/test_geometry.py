@@ -5,7 +5,7 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "src"))
 
 import pytest
-from drowsiness.geometry import eye_aspect_ratio, mouth_aspect_ratio, head_tilt_angle
+from drowsiness.geometry import eye_aspect_ratio, mouth_aspect_ratio
 
 
 def test_ear_open_eye_is_larger_than_closed_eye():
@@ -31,10 +31,3 @@ def test_mar_yawn_is_larger_than_closed_mouth():
     assert mouth_aspect_ratio(open_mouth) > mouth_aspect_ratio(closed_mouth)
 
 
-def test_head_tilt_angle_zero_when_level():
-    assert head_tilt_angle((0, 0), (10, 0)) == pytest.approx(0.0)
-
-
-def test_head_tilt_angle_positive_when_tilted_down():
-    angle = head_tilt_angle((0, 0), (10, 10))
-    assert angle == pytest.approx(45.0)

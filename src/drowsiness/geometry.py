@@ -49,8 +49,4 @@ def mouth_aspect_ratio(mouth: Sequence[Point]) -> float:
     return (vertical_1 + vertical_2) / (2.0 * horizontal)
 
 
-def head_tilt_angle(left_eye_outer: Point, right_eye_outer: Point) -> float:
-    """Roll angle (degrees) of the eye line, useful for nod/head-drop cues."""
-    dx = right_eye_outer[0] - left_eye_outer[0]
-    dy = right_eye_outer[1] - left_eye_outer[1]
-    return math.degrees(math.atan2(dy, dx))
+

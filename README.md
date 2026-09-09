@@ -55,7 +55,7 @@ Drop a `.wav` file at `assets/alarm.wav` (or point `--alarm-file` / the dashboar
 
 ## Possible next steps
 
-- Head-pose (nod/roll) as a third drowsiness signal, using `head_tilt_angle` already in `geometry.py`.
+
 - Multi-face support for driver + passenger monitoring.
 - Export a session log (CSV/JSON) of PERCLOS over time instead of just a console summary.
 - Package a Dockerfile for one-command deployment.
