@@ -28,6 +28,6 @@ def calibrate(ear_samples: List[float], mar_samples: List[float]) -> Thresholds:
     mar_std = pstdev(mar_samples) if len(mar_samples) > 1 else 0.05
 
     ear_threshold = max(0.10, ear_mean - 2.0 * ear_std)
-    mar_threshold = mar_mean + 3.0 * mar_std
+    mar_threshold = max(0.6, mar_mean + 3.0 * mar_std)   
 
     return Thresholds(ear_threshold=round(ear_threshold, 3), mar_threshold=round(mar_threshold, 3))

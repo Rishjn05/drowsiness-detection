@@ -14,6 +14,7 @@ import streamlit as st
 
 from src.drowsiness.alarm import AlarmPlayer
 from src.drowsiness.detector import DetectorConfig, DrowsinessDetector
+from src.drowsiness.duration_tracker import DurationTracker
 from src.drowsiness.session_log import SessionLogger
 
 st.set_page_config(page_title="Drowsiness Detection", layout="wide")
@@ -24,6 +25,7 @@ with st.sidebar:
     source_type = st.radio("Video source", ["Upload video", "Webcam"])
     ear_threshold = st.slider("EAR threshold (lower = stricter)", 0.10, 0.35, 0.21, 0.01)
     mar_threshold = st.slider("MAR (yawn) threshold", 0.3, 1.0, 0.6, 0.05)
+    yawn_seconds = st.slider("Mouth must stay open (s) before it's a yawn", 1.0, 8.0, 4.0, 0.5)
     perclos_ratio = st.slider("PERCLOS drowsy ratio", 0.1, 0.9, 0.4, 0.05)
     alarm_cooldown = st.slider("Alarm cooldown (s)", 1.0, 10.0, 3.0, 0.5)
     alarm_file = st.text_input("Alarm sound path", "assets/alarm.wav")
@@ -61,6 +63,7 @@ if run_button:
             ear_threshold=ear_threshold,
             mar_threshold=mar_threshold,
             perclos_drowsy_ratio=perclos_ratio,
+            yawn_seconds=yawn_seconds,
         )
         detector = DrowsinessDetector(config)
         alarm = AlarmPlayer(alarm_file, cooldown_seconds=alarm_cooldown)
@@ -79,7 +82,7 @@ if run_button:
                     break
                 frame_count += 1
                 frame = cv2.resize(frame, (800, 500))
-                result = detector.process(frame)
+                result = detector.process(frame, timestamp=time.time() - session_start)
                 perclos_history.append(result.perclos)
                 logger.log_frame(time.time() - session_start, result)
 

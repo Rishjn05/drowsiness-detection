@@ -13,7 +13,7 @@ LEFT_EYE = [33, 160, 158, 133, 153, 144]
 RIGHT_EYE = [362, 385, 387, 263, 373, 380]
 
 # Outer mouth contour, 6 points spanning left corner -> right corner.
-MOUTH = [61, 81, 311, 291, 178, 402]
+MOUTH = [61, 81, 311, 291, 402, 178]
 
 LEFT_EYE_OUTER_CORNER = 33
 RIGHT_EYE_OUTER_CORNER = 263

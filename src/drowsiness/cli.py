@@ -10,6 +10,7 @@ import cv2
 from .alarm import AlarmPlayer
 from .calibration import calibrate
 from .detector import DetectorConfig, DrowsinessDetector
+from .duration_tracker import DurationTracker
 from .session_log import SessionLogger
 
 
@@ -21,10 +22,18 @@ def parse_args(argv=None) -> argparse.Namespace:
         help="Video source: webcam index (e.g. 0) or path to a video file",
     )
     p.add_argument("--alarm-file", default="assets/alarm.wav", help="Path to alarm sound")
-    p.add_argument("--alarm-cooldown", type=float, default=3.0, help="Seconds between alarm triggers")
+    p.add_argument("--alarm-cooldown", type=float, default=3.0, help="Seconds between repeat alarm triggers")
+    p.add_argument(
+        "--alarm-delay",
+        type=float,
+        default=2.0,
+        help="Seconds the drowsy state must persist (in addition to the yawn/eye-closure "
+        "duration) before the alarm actually sounds — filters out momentary/borderline flags",
+    )
     p.add_argument("--calibrate-seconds", type=float, default=3.0, help="Baseline calibration window; 0 to skip")
     p.add_argument("--ear-threshold", type=float, default=None, help="Override EAR threshold (skips calibration)")
     p.add_argument("--mar-threshold", type=float, default=None, help="Override MAR threshold (skips calibration)")
+    p.add_argument("--yawn-seconds", type=float, default=4.0, help="Seconds mouth must stay open before it counts as a yawn")
     p.add_argument("--no-display", action="store_true", help="Run headless (no cv2.imshow window)")
     p.add_argument(
         "--log-dir",
@@ -48,7 +57,7 @@ def run(argv=None) -> int:
         return 1
 
     fps = cap.get(cv2.CAP_PROP_FPS) or 15
-    config = DetectorConfig(fps_estimate=int(fps) or 15)
+    config = DetectorConfig(fps_estimate=int(fps) or 15, yawn_seconds=args.yawn_seconds)
 
     detector = DrowsinessDetector(config)
     alarm = AlarmPlayer(args.alarm_file, cooldown_seconds=args.alarm_cooldown)
@@ -66,7 +75,7 @@ def run(argv=None) -> int:
             ok, frame = cap.read()
             if not ok:
                 break
-            result = detector.process(frame)
+            result = detector.process(frame, timestamp=time.time() - start)
             if result.face_found and result.ear is not None:
                 ear_samples.append(result.ear)
                 mar_samples.append(result.mar)
@@ -82,6 +91,7 @@ def run(argv=None) -> int:
     drowsy_frames = 0
     start_time = time.time()
     logger = SessionLogger() if args.log_dir else None
+    alarm_gate = DurationTracker(threshold_seconds=args.alarm_delay)
 
     try:
         while True:
@@ -90,14 +100,20 @@ def run(argv=None) -> int:
                 break
             frame_count += 1
             frame = cv2.resize(frame, (800, 500))
-            result = detector.process(frame)
             elapsed = time.time() - start_time
+            result = detector.process(frame, timestamp=elapsed)
 
             if logger is not None:
                 logger.log_frame(elapsed, result)
 
             if result.drowsy:
                 drowsy_frames += 1
+
+            # Require the drowsy state to persist for --alarm-delay seconds
+            # (on top of the yawn/eye-closure duration itself) before the
+            # alarm actually sounds, so a single borderline frame doesn't
+            # trigger it immediately.
+            if alarm_gate.is_past_threshold(result.drowsy, elapsed):
                 alarm.trigger()
 
             if not args.no_display:
@@ -144,6 +160,8 @@ def _annotate(frame, result) -> None:
         cv2.putText(frame, "No face detected", (10, frame.shape[0] - 10), font, 0.8, (0, 165, 255), 2)
         return
     perclos_text = f"PERCLOS: {result.perclos:.2f}  EAR: {result.ear:.2f}  MAR: {result.mar:.2f}"
+    if result.yawn_duration > 0:
+        perclos_text += f"  Mouth open: {result.yawn_duration:.1f}s"
     cv2.putText(frame, perclos_text, (10, frame.shape[0] - 10), font, 0.6, (255, 255, 255), 1)
     if result.drowsy:
         cv2.putText(frame, "DROWSY", (frame.shape[1] - 160, 40), font, 1, (0, 0, 255), 2)
